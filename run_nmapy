@@ -1,0 +1,16 @@
+#!/usr/bin/env -S python3 -B
+import argparse
+import nmapy
+import sys
+
+def main():
+    parser = argparse.ArgumentParser(add_help=False, description='Python nmap parser.', usage='%(prog)s --display hosts --file nmap_file.gnmap --display ,')
+    parser.add_argument('--help', action='help', help='Show this help message and exits.')
+    parser.add_argument('--delimiter', default='\n', help='What to delimate results on.')
+    parser.add_argument('--display', default='hosts', help='What to display.')
+    parser.add_argument('--file', type=str, help='The nmap file to parse.')
+    args = parser.parse_args()
+    return nmapy.parse(args)
+
+if __name__ == '__main__':
+    sys.exit(main())
