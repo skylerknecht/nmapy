@@ -4,7 +4,7 @@ import nmapy
 import sys
 
 def main():
-    parser = argparse.ArgumentParser(add_help=False, description='Python nmap parser.', usage='%(prog)s --display hosts --file nmap_file.gnmap --display ,')
+    parser = argparse.ArgumentParser(add_help=False, description='Python nmap parser.', usage='%(prog)s --display display_method --file nmap_file.gnmap --delimiter delimiter_token')
     parser.add_argument('--help', action='help', help='Show this help message and exits.')
     parser.add_argument('--delimiter', default='\n', help='What to delimate results on.')
     parser.add_argument('--display', default='hosts', help='What to display.')

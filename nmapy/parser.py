@@ -43,7 +43,7 @@ class Parser:
                     addr = _line_values[1]
                     hostname = _line_values[2]
                     status = 'Up'
-                    services = ''.join(_line_values[4:]).split(',')
+                    services = ''.join(_line_values[4:]).split('/,')
                     services = self.parse_services(services)
                     self.hosts.append(Host(addr, hostname, status, services))
                     continue
