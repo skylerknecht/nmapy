@@ -1,16 +1,20 @@
 #!/usr/bin/env -S python3 -B
 import argparse
-import nmapy
-import sys
+from nmapy.parser import Parser
 
 def main():
-    parser = argparse.ArgumentParser(add_help=False, description='Python nmap parser.', usage='%(prog)s --display display_method --file nmap_file.gnmap --delimiter delimiter_token')
-    parser.add_argument('--help', action='help', help='Show this help message and exits.')
-    parser.add_argument('--delimiter', default='\n', help='What to delimate results on.')
-    parser.add_argument('--display', default='hosts', help='What to display.')
-    parser.add_argument('--file', type=str, help='The nmap file to parse.', required=True)
+    parser = argparse.ArgumentParser(description='Messenger command line tool.')
+    parser.add_argument("--file", required=True, help="Nmap output file")
+    parser.add_argument("--delimiter", default='\n', help="Delimiter for output")
+    parser.add_argument('--display', choices=['hosts', 'livehosts', 'liveports', 'webhosts', 'webports', 'smbhosts', 'sqlhosts', 'sqlports'], default='hosts',
+                        help='What to display. Options: hosts, webhosts, webports, smbhosts, sqlhosts, sqlports. Default is hosts.')
+
     args = parser.parse_args()
-    return nmapy.parse(args)
+
+    # Initialize parser and call the appropriate display function
+    p = Parser(args.file, args.delimiter)
+    display_function = p.display_functions[args.display]
+    display_function()
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
