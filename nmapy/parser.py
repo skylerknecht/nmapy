@@ -74,15 +74,39 @@ class Parser:
         stripped_items = [item.strip() for item in items]
         print(self.delimiter.join(stripped_items))
 
+    def output_md_table(self, column_names, rows):
+        # Calculate the width of each column
+        column_widths = [len(col) for col in column_names]
+        for row in rows:
+            for i, cell in enumerate(row):
+                column_widths[i] = max(column_widths[i], len(str(cell)))
+
+        # Create the header row
+        header = "| " + " | ".join(col.ljust(width) for col, width in zip(column_names, column_widths)) + " |"
+        separator = "| " + " | ".join('-' * width for width in column_widths) + " |"
+
+        # Create the data rows
+        data_rows = []
+        for row in rows:
+            data_row = "| " + " | ".join(str(cell).ljust(width) for cell, width in zip(row, column_widths)) + " |"
+            data_rows.append(data_row)
+
+        # Combine all parts into the final table
+        table = "\n".join([header, separator] + data_rows)
+        print(table)
+
     def display_hosts(self):
         output_lines = []
+        rows = []
         for host in self.hosts:
             output_line = f'{host.addr} ({host.hostname}) {host.status}'
             if host.services:
                 services = [f'{service.application_protocol} {service.number} {service.transport_protocol} {service.status}' for service in host.services]
                 output_line += ' ' + ', '.join(services)
+                rows.append([host.addr, ' '.join([f'{service.number}/{service.transport_protocol}' for service in host.services])])
             output_lines.append(output_line)
-        self.output(output_lines)
+        #self.output(output_lines)
+        self.output_md_table(column_names=['host', 'services'], rows=rows)
 
     def display_webhosts(self):
         output_lines = []
